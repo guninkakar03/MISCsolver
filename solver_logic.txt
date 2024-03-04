@@ -1,0 +1,35 @@
+This place is for some notes and progress tracking for myself :-)
+This multi-solution inverse kinematics problem is solved using a bunch of helper functions
+
+Basic conversion functions are used to convert between the different coordinate systems like
+conversion from arc parameters to quaternion and etc. This includes the following functions which can 
+be found in conversionHelper.cpp:
+    - arc2q.m  (implemented)
+    - q2arc.m  (implemented)
+    - arc2xi.m
+        - This one is also simply following the MATLAB code.
+        No specific eigen functions are used here except for the usual
+        MatrixXd and VectorXd and etc.
+    - xi2arc.m  (implemented)
+    - xi2len.m  
+        - This one is not implemented yet but most of this function is very similar to 
+          the MATLAB code. There are some eigen specific functions that need to be used like
+          matrix.zeros() and transpose and etc.
+    - q2rot.m  (implemented)
+    - rot2q.m (implemented)
+
+There are also some numerical methods that are used to solve the inverse kinematics problem.
+The main two functions will be implemented in NumericalMethods.cpp:
+    - revise_newton.m
+        - This function also seems pretty straightforward. Although, they did use some build-in MATLAB functions
+            which might be needed to be implemented in C++ using eigen.
+                - NaN(M,N) produces an M-by-N matrix of NaN values. The alternative to this
+                in eigen is to simply use a matrix with zeros.
+                - norm(X) is also which where an exact equivalent is available in eigen.
+                - Jacobian helper function is also used.
+
+    - revise_dls.m
+
+
+
+
