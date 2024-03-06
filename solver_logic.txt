@@ -31,5 +31,38 @@ The main two functions will be implemented in NumericalMethods.cpp:
     - revise_dls.m
 
 
+Quaternion Operations (3 files)
+    up_plus.m
+    up_oplus.m
+    up_star.m
+
+Lie Algebra Operations (4 files)
+[C]    up_hat.m
+[C]    up_vee.m
+[C]    exphat.m
+[C]    veelog.m
+
+Conversions (6 files)
+    arc2q.m
+    q2arc.m
+    arc2xi.m
+    xi2arc.m
+    xi2len.m
+[C]    q2rot.m
+[C]    rot2q.m
+
+Numerical Methods (5 files)
+    revise_grad.m
+    revise_dls.m
+    revise_newton.m
+    revise_plot.m
+    jacobian3cc.m
 
 
+Solver (7 files)
+    micsolver.m
+    rho.m
+    soln2xi.m
+    get_err.m
+    solve_r1.m
+    solve_r2.m
