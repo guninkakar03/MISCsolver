@@ -58,5 +58,14 @@ public:
     */
     static Eigen::Matrix4d exphat(Eigen::Matrix<double, 6, 1> V);
 
+
+    static Eigen::Matrix4d up_plus(Eigen::Quaterniond q);
+
+    static Eigen::Matrix4d up_oplus(Eigen::Quaterniond q);
+
+    static Eigen::Quaterniond up_star(Eigen::Quaterniond q);
+
+    static Eigen::Matrix4d get_end(double L1, double L2, double L3, Eigen::VectorXd xi);
+
 };
 #endif //CSC492_LIEALGEBRA_H

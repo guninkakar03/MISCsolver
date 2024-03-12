@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include <Eigen/Dense>
+// static std::array<double, 2> q2arc(Eigen::Quaterniond q, double L);
 
 class ConversionHelper {
 public:
@@ -95,7 +96,8 @@ public:
     *
     * @param xi - the concatenated parameter
     */
-    static double xi2len(Eigen::Matrix<double, 6, 1> xi);
+    // static Eigen::VectorXd xi2len(Eigen::Matrix<double, 6, 1> xi);
+
 
 };
 
