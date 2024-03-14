@@ -92,27 +92,30 @@ Eigen::VectorXd LieAlgebra::veelog(Eigen::MatrixXd M) {
 * @param V - the vector to be converted
 */
 Eigen::Matrix4d LieAlgebra::exphat(Eigen::Matrix<double, 6, 1> V) {
-    double theta = V.head(3).norm();
+    Eigen::VectorXd VE(6);
+    VE << V(0,0) , V(1,0),  V(2,0),  V(3,0),  V(4,0),  V(5,0);
+    double theta = VE.head(3).norm();
     Eigen::Matrix4d M;
     Eigen::Matrix3d eye = Eigen::Matrix3d::Identity();
     if (theta < 2e-8) {
-        M << eye, V.tail(3),
+        M << eye, VE.tail(3),
             0, 0, 0, 1;
     } else {
         Eigen::Vector3d omega;
-        omega = V.head(3) / theta;
+        omega = VE.head(3) / theta;
 
         Eigen::Vector3d v;
-        v = V.tail(3) / theta;
+        v = VE.tail(3) / theta;
 
         Eigen::Matrix3d tempM;
         tempM << eye + sin(theta) * LieAlgebra::up_hat(omega) + (1 - cos(theta)) * (LieAlgebra::up_hat(omega) * LieAlgebra::up_hat(omega));
 
         Eigen::Vector3d tempV;
-        tempV << (eye * theta + (1 - cos(theta)) * LieAlgebra::up_hat(omega) + (theta - sin(theta)) * LieAlgebra::up_hat(omega) * LieAlgebra::up_hat(omega)) * v;
+        tempV << (eye * theta + (1 - cos(theta)) * LieAlgebra::up_hat(omega) + (theta - sin(theta)) * (LieAlgebra::up_hat(omega) * LieAlgebra::up_hat(omega))) * v;
         M << tempM, tempV,
             0, 0, 0, 1;
     }
+    // std::cout << "M" << M  << std::endl;
 
     return M;
 }

@@ -15,7 +15,6 @@ double NumericalMethods::revise_newton(double L1, double L2, double L3, Eigen::Q
     Eigen::VectorXd e = Eigen::VectorXd::Constant(msteps + 1, std::nan("1"));
 
     int k = 0;
-
     while(k < msteps){
         Eigen::Matrix4d Tt = LieAlgebra::get_end(L1, L2, L3, xi);
         Eigen::VectorXd V  = LieAlgebra::up_vee((Tt.inverse() * Td).log()); 
@@ -30,6 +29,13 @@ double NumericalMethods::revise_newton(double L1, double L2, double L3, Eigen::Q
             xi = xi + ((J.transpose() * J).inverse() * J.transpose()) * V;
             xi = ConversionHelper::arc2xi(L1, L2, L3, ConversionHelper::xi2arc(L1, L2, L3, xi));
             k += 1;
+            if(k == 9){
+                std::cout << "k: " << k << std::endl;
+                std::cout << "Tt: " << Tt << std::endl;
+                std::cout << "J: " << J << std::endl;
+                std::cout << "xi: " << xi << std::endl;
+                break;
+            }
         }
     }
 
@@ -42,7 +48,7 @@ double NumericalMethods::revise_newton(double L1, double L2, double L3, Eigen::Q
         e(k) = V.norm();
     }
     xi_star = xi;
-    std::cout << "k: " << k << std::endl;
+    
     return e(k);
 }
 
@@ -56,6 +62,7 @@ double NumericalMethods::revise_dls(double L1, double L2, double L3, Eigen::Quat
     Eigen::VectorXd e = Eigen::VectorXd::Constant(msteps + 1, std::nan("1"));
 
     int k = 0;
+   
 
     while(k < msteps){
         Eigen::Matrix4d Tt = LieAlgebra::get_end(L1, L2, L3, xi);

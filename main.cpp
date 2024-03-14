@@ -17,20 +17,22 @@ int main() {
     Eigen::Quaterniond q(cos(alpha / 2), sin(alpha / 2) * omega(0), sin(alpha / 2) * omega(1), sin(alpha / 2) * omega(2));
     Eigen::Vector3d r;
     r << -0.4, 1.1, 0.8;
-    Eigen::Matrix<double, 6, 1> TEMP;
+    Eigen::VectorXd TEMP(6);
     TEMP << 1, 2, 1, 2, 1, 2;
     Eigen::VectorXd RAND(6);
     RAND << 0.8147,0.9058,0.1270,0.9134,0.6324,0.0975;
-    Eigen::Matrix<double, 6, 1> TEMP_times_RAND;
-    for (int i = 0; i < 6; ++i) {
-    TEMP_times_RAND(i) = TEMP(i) * RAND(i);
-    }
-    Eigen::Matrix<double, 6, 1> xi_0 = ConversionHelper::arc2xi(L1, L2, L3, M_PI * TEMP_times_RAND);
+    // Eigen::Matrix<double, 6, 1> TEMP_times_RAND;
+    // // for (int i = 0; i < 6; ++i) {
+    // // TEMP_times_RAND(i) = TEMP(i) * RAND(i);
+    // // }
+    Eigen::Matrix<double, 6, 1> xi_0 = ConversionHelper::arc2xi(L1, L2, L3, M_PI * TEMP.cwiseProduct(RAND));
+    std:: cout <<  M_PI * TEMP.cwiseProduct(RAND) << std::endl;
     Eigen::Matrix<double, 6, 1> xi_star;
-    // double e = NumericalMethods::revise_dls(L1, L2, L3, q, r, xi_0, 2000, 1e-2, xi_star);
+    // // double e = NumericalMethods::revise_dls(L1, L2, L3, q, r, xi_0, 2000, 1e-2, xi_star);
     double e = NumericalMethods::revise_newton(L1, L2, L3, q, r, xi_0, 200, 1e-2, xi_star);
     std::cout << xi_star << std::endl;
-    std::cout << e << std::endl;
+    // std::cout << e << std::endl;
+   
     return 0;
 
 }
