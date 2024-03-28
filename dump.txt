@@ -1,0 +1,38 @@
+ Eigen::Matrix<double, 3, 2> r0_ne;
+            r0_ne << r0, ne;
+            Eigen::MatrixXd A(2, 2);
+            A << 0, 0, L1 * d * (1 / acos(r1(2)) - 1 / sqrt(1 - r1(2) * r1(2))),
+                 ne.transpose();
+            A = (A * r0_ne).inverse();
+            Eigen::Vector2d B;
+            B << n0.transpose() * r1 - rho(r1(2), L1) * d,
+                 ne.transpose() * r1;
+            Eigen::Vector3d tmp = r1 - r0_ne * (A * B);
+            r1 = tmp.normalized();
+
+
+tmp = 
+
+
+r1 - [r0, ne] 
+
+* 
+
+(
+([n0.' +innerpart; ne.'] * [r0, ne]) 
+\ 
+[n0.' * r1 - rho(r1(3), L1) * d; ne.' * r1]
+);
+
+
+Eigen::Matrix<double, 3, 2> r0_ne;
+r0_ne << r0, ne;
+
+
+Eigen::Vector3d innerpart;
+innerpart << 0, 0, L1 * d * (1 / acos(r1(2)) - 1 / sqrt(1 - r1(2) * r1(2)));
+
+Eigen::Vector3d total;
+total << ( no.transpose() + innerpart) * r0_ne;
+
+Eigen::Vector3d result = (n0.transpose() + Eigen::Vector3d(0, 0, L1 * q.z() * (1 / acos(r1(2)) - 1 / sqrt(1 - r1(2) * r1(2))))) * r0 + ne.transpose() * ne;
