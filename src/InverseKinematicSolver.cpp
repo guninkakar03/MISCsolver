@@ -52,15 +52,20 @@ Eigen::MatrixXd InverseKinematicSolver::miscSolver(double L1, double L2, double 
         int iterations;
         double err = NumericalMethods::revise_newton(L1, L2, L3, q, r, temp, msteps, tol, xi_star, iterations);
         noi = noi + iterations;
-        if (err < tol) {
-        sol.col(nos) = xi_star;
+        std::cout << "err: " << err << ", tol: " << tol << std::endl;
+
+        if (err <= tol) {
+            sol.col(nos) = xi_star;
             nos = nos + 1;
+            std::cout << "After assignment, sol:\n" << sol << std::endl;
+            std::cout << "Condition met, nos: " << nos << std::endl;
         }
     }
 
-    sol = sol.leftCols(nos);
-    // std::cout << "noi: " << noi << std::endl;
-    return sol;
+    std::cout << "Finally ***** assignment, sol:\n" << nos << std::endl;
+    Eigen::MatrixXd sol_trimmed = sol.block(0, 0, sol.rows(), nos);
+    std::cout << "noi: " << noi << std::endl;
+    return sol_trimmed;
 }
 
 /**

@@ -9,54 +9,11 @@
 #include <unsupported/Eigen/MatrixFunctions>
 
 
-
-
 int main() {
 
-
-//             // MOST RECENT VERSION OF TEST: // SUN MAR 17, 4:35
-//     double L1 = 1;
-//     double L2 = 1;
-//     double L3 = 1;
-//     double alpha = 15 * M_PI / 16;
-    
-   
-//     Eigen::Vector3d omega;
-//     omega << 0.48, sqrt(3) / 10, -0.86;
-    
-//     Eigen::Quaterniond q(cos(alpha / 2), sin(alpha / 2) * omega(0), sin(alpha / 2) * omega(1), sin(alpha / 2) * omega(2));
-//     Eigen::Vector3d r;
-//     r << -0.4, 1.1, 0.8;
-//     Eigen::VectorXd TEMP(6);
-//     TEMP << 1, 2, 1, 2, 1, 2;
-
-
-//     // Eigen::Matrix<double, 6, 1> xi_0 = ConversionHelper::arc2xi(L1, L2, L3, <filler>);
-//     // std:: cout <<  M_PI * TEMP.cwiseProduct(RAND) << std::endl;
-//     Eigen::Matrix<double, 6, 1> xi_0;
-//     xi_0 <<
-//     -0.2759,
-//    -2.9943,
-//    -1.9560,
-//     1.5795,
-//     0.6692,
-//     1.1436;
-
-
-
-
-//     Eigen::Matrix<double, 6, 1> xi_star;
-//     int k;
-//     double e = NumericalMethods::revise_newton(L1, L2, L3, q, r, xi_0, 200, 1e-2, xi_star,k);
-    
-//     std::cout << xi_star << std::endl;
-//     std::cout << e <<  std::endl;
-//     std::cout << k << std::endl;
-
-//     return 0;
-        // code to check MISCSOLVER
-        double L1 = 1;
-    double L2 = 1;
+    // code to check MISCSOLVER
+    double L1 = 1;
+    double L2 = 2;
     double L3 = 1;
     double alpha = 15 * M_PI / 16;
     Eigen::Vector3d omega;
