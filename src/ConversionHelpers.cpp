@@ -43,8 +43,7 @@ Eigen::Quaterniond ConversionHelper::rot2q(Eigen::Matrix3d R) {
 /**
  * @brief Converts a Quaternion to arc parameters.
  * 
- * This method converts a Quaternion to arc parameters of a 1-section constant-curvature robot,
- * including the curvature KAPPA and bending angle PHI. The section length is L.
+ * This method converts a Quaternion to arc parameters of a 1-section constant-curvature robot.
  * 
  * @param q - the Quaternion to be converted
  * @param L - the length of the 1 section of the Continuum robot
@@ -89,11 +88,11 @@ Eigen::Quaterniond ConversionHelper::arc2q(double kappa, double phi, double L) {
 Eigen::Matrix<double, 6, 1> ConversionHelper::arc2xi(int L1, int L2, int L3, Eigen::Matrix<double, 6, 1> arc) {
     Eigen::Matrix<double, 6, 1> xi;
     xi << -L1 * arc(0) * sin(arc(1)),
-            L1 * arc(0) * cos(arc(1)),
-            -L2 * arc(2) * sin(arc(3)),
-            L2 * arc(2) * cos(arc(3)),
-            -L3 * arc(4) * sin(arc(5)),
-            L3 * arc(4) * cos(arc(5));
+           L1 * arc(0) * cos(arc(1)),
+          -L2 * arc(2) * sin(arc(3)),
+           L2 * arc(2) * cos(arc(3)),
+          -L3 * arc(4) * sin(arc(5)),
+           L3 * arc(4) * cos(arc(5));
     return xi;
 }
 
