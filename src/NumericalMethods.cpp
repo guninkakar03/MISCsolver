@@ -95,6 +95,27 @@ double NumericalMethods::revise_newton(double L1, double L2, double L3, Eigen::Q
     return e(k);
 }
 
+/**
+ * NOTE: THE IMPLEMENTATION OF INVERSE KINEMATICS SOLVER USES THE REVISE_NEWTON METHOD
+ *
+ * @brief This method performs the Damped Least Squares
+ * 
+ * This method performs the Damped Least Squares to solve the inverse kinematics of a 3-section constant-curvature robot.
+ * The initial guess or the input parameter for this function is based out of candidate selection 
+ * makes sure that the solution is found within a few iterations.
+ * 
+ * @param L1 - the length of the 1st section
+ * @param L2 - the length of the 2nd section
+ * @param L3 - the length of the 3rd section
+ * @param q - the Quaternion representing the orientation of the EE
+ * @param r - the position of the EE (or translation vector)
+ * @param xi - the initial guess (NOTE: The actual implementation uses Candidate selection)
+ * @param msteps - the maximum number of iterations
+ * @param tol - Error tolerance
+ * @param xi_star - the solution to the inverse kinematics (@return value)
+ * 
+ * @return the error value
+ */
 double NumericalMethods::revise_dls(double L1, double L2, double L3, Eigen::Quaterniond q, Eigen::Vector3d r, Eigen::Matrix<double, 6, 1> xi, int msteps, double tol, Eigen::Matrix<double, 6, 1>& xi_star) {
     Eigen::Matrix4d Td;
     Td << ConversionHelper::q2rot(q), r,
@@ -185,16 +206,14 @@ Eigen::MatrixXd NumericalMethods::jacobian3cc(double L1, double L2, double L3, E
 
 
 /**
- * @TODO COMPLETE DOC FOR THIS METHOD
- * @brief todo
+ * @brief The function is responsible for computing the sub-Jacobian matrix for an individual section of the continuum robot.
+ *
+ * @param w1 -  The angular velocities or bending angles of the section.
+ * @param w2 -  The angular velocities or bending angles of the section.
+ * @param L - the length of the section
  * 
- * @param w1
- * @param w2
- * @param L - the length of the a section of the Continuum robot
- * 
- * @return a 6x2 Jacobian matrix
- * 
-*/
+ * @return a 6x3 Jacobian matrix
+ */
 Eigen::MatrixXd NumericalMethods::jaco_c12(double w1, double w2, double L) {
     Eigen::Vector3d w;
     w << w1, w2, 0;
@@ -221,9 +240,9 @@ Eigen::MatrixXd NumericalMethods::jaco_c12(double w1, double w2, double L) {
 
 
         Eigen::Matrix3d pwJleftwv;
-        pwJleftwv <<       p1M * w2,                    p2M * w2 + M,                           0,
-                      -p1M * w1 - M,                        -p2M * w1,                          0,
-                        -p1N * pow(n, 2) - 2 * N * w1,    -p2N * pow(n, 2) - 2 * N * w2,        0;
+        pwJleftwv <<                     p1M * w2,                    p2M * w2 + M,        0,
+                                    -p1M * w1 - M,                        -p2M * w1,       0,
+                    -p1N * pow(n, 2) - 2 * N * w1,    -p2N * pow(n, 2) - 2 * N * w2,       0;
 
         pwJleftwv = L * pwJleftwv;
 
@@ -236,43 +255,3 @@ Eigen::MatrixXd NumericalMethods::jaco_c12(double w1, double w2, double L) {
 
     return Jc.leftCols(2);
 }
-
-
-// Eigen::MatrixXd  NumericalMethods::jaco_c12(double w1, double w2, double L) {
-//     Eigen::Vector3d w;
-//     w << w1, w2, 0;
-
-//     Eigen::Matrix3d eye = Eigen::Matrix3d::Identity();
-//     double n = w.norm();
-
-//     Eigen::MatrixXd Jc(6, 3);
-
-//     if (n == 0) {
-//         double ML = L / 2.0;
-//         Jc << eye,
-//               0, ML, 0,
-//               -ML, 0, 0,
-//               0, 0, 0;
-//     } else {
-//         double M = (1 - cos(n)) / std::pow(n, 2);
-//         double N = (n - sin(n)) / std::pow(n, 3);
-//         double p1M = (w1 / std::pow(n, 2)) - ((w1 * N) + (2 * (w1 * M) / std::pow(n, 2)));
-//         double p2M = (w2 / std::pow(n, 2)) - ((w2 * N) + (2 * (w2 * M) / std::pow(n, 2)));
-//         double p1N = ((w1 * M) / std::pow(n, 2)) - (3 * (w1 * N) / std::pow(n, 2));
-//         double p2N = ((w2 * M) / std::pow(n, 2)) - (3 * (w2 * N) / std::pow(n, 2));
-//         Eigen::Matrix3d pwJleftwv;
-//         pwJleftwv << (p1M * w2), (p2M * w2 + M), 0,
-//                     (-p1M * w1 - M), (-p2M * w1), 0,
-//                     (-p1N * std::pow(n, 2) - (2 * N * w1)), (-(p2N * std::pow(n, 2)) - (2 * N * w2)), 0;
-
-//         pwJleftwv = L * pwJleftwv;
-
-//         Eigen::Matrix3d w_hat = LieAlgebra::up_hat(w);  // Assume up_hat is implemented correctly
-//         Eigen::Matrix3d exp_w_hat_transpose = w_hat.exp().transpose();
-//         Jc << (eye - (M * w_hat) + (N * (w_hat * w_hat))),
-//             (exp_w_hat_transpose * pwJleftwv);
-//     }
-
-//     return Jc.leftCols(2);
-// }
-
