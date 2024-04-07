@@ -5,5 +5,6 @@
 
 This project is called "MISCsolver"
 
+## Methods
 ## Installation
 
