@@ -89,7 +89,10 @@ Eigen::VectorXd LieAlgebra::veelog(Eigen::MatrixXd M) {
         return V;
     } 
     else {
-        double theta = acos((R.trace() - 1) / 2.0);
+        double trace_val = (R.trace() - 1) / 2;
+        trace_val = std::max(-1.0, std::min(1.0, trace_val)); // Clamp to [-1, 1]
+        double theta = std::acos(trace_val);
+    //ORIGINAL:     double theta = acos((R.trace() - 1) / 2.0);
         Eigen::Matrix3d omega_hat = 1.0 / (2 * sin(theta)) * (R - R.transpose());
         Eigen::VectorXd V(6);
         V << LieAlgebra::up_vee(omega_hat) * theta,
@@ -98,6 +101,30 @@ Eigen::VectorXd LieAlgebra::veelog(Eigen::MatrixXd M) {
         return V;
     }
     return Eigen::VectorXd::Zero(6);
+
+
+    // Eigen::Matrix3d R = M.block<3, 3>(0, 0);
+    // Eigen::Vector3d p = M.block<3, 1>(0, 3);
+
+    // if ((R - Eigen::Matrix3d::Identity()).norm() < 2e-8) {
+    //     return Eigen::Vector4d(0, 0, 0, p.norm());
+    // } else {
+    //     double trace_val = (R.trace() - 1) / 2;
+    //     trace_val = std::max(-1.0, std::min(1.0, trace_val)); // Clamp to [-1, 1]
+    //     double theta = std::acos(trace_val);
+    //     Eigen::Matrix3d omega_hat = 1 / (2 * std::sin(theta) + 1e-8) * (R - R.transpose());
+    //     Eigen::Vector3d omega = Eigen::Vector3d(omega_hat(2, 1), omega_hat(0, 2), omega_hat(1, 0)) * theta;
+
+    //     Eigen::Matrix3d V_mat;
+    //     if (std::abs(theta) < 1e-8) {
+    //         V_mat = Eigen::Matrix3d::Identity() + 0.5 * omega_hat;
+    //     } else {
+    //         V_mat = Eigen::Matrix3d::Identity() - theta / 2 * omega_hat + (1 - theta / 2 * std::tan(theta / 2)) * omega_hat * omega_hat;
+    //     }
+
+    //     Eigen::Vector3d V_p = V_mat * p;
+    //     return Eigen::Vector4d(omega(0), omega(1), omega(2), V_p.norm());
+    // }
 }
 
 /**

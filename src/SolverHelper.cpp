@@ -107,8 +107,10 @@ double SolverHelper::get_err(Eigen::Vector3d r1, Eigen::Vector3d r2, Eigen::Vect
         0, 0, 0, 1;
     
     Eigen::Matrix4d Tt = T1 * T2 * T3;
-
-    Eigen::VectorXd V = LieAlgebra::veelog((Tt.inverse() * Td));
+    // Eigen::Matrix4d vec = Tt.lu().inverse() * Td;
+    Eigen::Matrix4d vec = (Tt.inverse() * Td);
+    std::cout << vec << std::endl;
+    Eigen::VectorXd V = LieAlgebra::veelog(vec);
     // std::cout << V << std::endl;
     return V.norm();
 
