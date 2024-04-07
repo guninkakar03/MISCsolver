@@ -30,14 +30,15 @@
 Eigen::MatrixXd LieAlgebra::up_hat(Eigen::VectorXd V) {
     if (V.size() == 3) {
         Eigen::Matrix3d M;
-        M <<    0, -V(2),  V(1),
+        M <<   0, -V(2),  V(1),
             V(2),     0, -V(0),
-            -V(1),  V(0),     0;
+           -V(1),  V(0),     0;
         return M;
+    
     } else if (V.size() == 6) {
         Eigen::Matrix4d M;
         M <<    0, -V(2),  V(1), V(3),
-            V(2),     0, -V(0), V(4),
+             V(2),     0, -V(0), V(4),
             -V(1),  V(0),     0, V(5),
                 0,     0,     0,    0;
         return M;
@@ -45,21 +46,22 @@ Eigen::MatrixXd LieAlgebra::up_hat(Eigen::VectorXd V) {
     return Eigen::MatrixXd::Identity(3, 3);
 }
 
-/*
-* This method computes the Lie algebra of a vector.
-* V = UP_VEE(M) is an element of \mathbb{R}^3 or \mathbb{R}^6, where M is
-* an element of \mathsf{so}_3 or \mathsf{se}_3, respectively.
-*
-* NOTE: This method is equivalent to the MATLAB function MISC.up_vee(M)
-*
-* @param M - the matrix to be converted
-* @return the Lie algebra vector
-*/
+/**
+ * @brief This method computes the VEE operation of a skew-symmetric matrix.
+ * 
+ * This method converts a skew-symmetric matrix to a vector.
+ * If the input matrix is a 3x3 matrix, the output is a 3x1 vector.
+ * If the input matrix is a 4x4 matrix, the output is a 6x1 vector.
+ *
+ * @param M - the matrix to be converted
+ * @return the VEE vector
+ */
 Eigen::VectorXd LieAlgebra::up_vee(Eigen::MatrixXd M) {
     if (M.rows() == 3 && M.cols() == 3) {
         Eigen::Vector3d V;
         V << -M(1, 2), M(0, 2), -M(0, 1);
         return V;
+    
     } else if (M.rows() == 4 && M.cols() == 4) {
         Eigen::VectorXd V(6);
         V << -M(1, 2), M(0, 2), -M(0, 1), M(0, 3), M(1, 3), M(2, 3);
@@ -68,18 +70,16 @@ Eigen::VectorXd LieAlgebra::up_vee(Eigen::MatrixXd M) {
     return Eigen::VectorXd::Zero(3);
 }
 
-/*
-* This method does VEELOG Composition of the matrix logarithm and the vee map.
-* V = VEELOG(M) is a vector in \mathbb{R}^3 or \mathbb{R}^4 and is
-* computed using Rodrigues' formula. The matrix M is in \mathsf{SO}_3 or
-* \mathsf{SE}_3. The vee map sends an element of \mathsf{so}_3 or
-* \mathsf{se}_3 to a vector.
-*
-* NOTE: This method is equivalent to the MATLAB function MISC.veelog(M)
-*
-* @param M - the matrix to be converted
-* @return the VEELOG vector
-*/
+/**
+ * @brief This method computes the Composition of the matrix logarithm.
+ * 
+ * VEELOG is a function that computes the composition of the matrix logarithm using
+ * Rodrigues' formula. The function also VEE maps the an element of \mathsf{so}_3 or
+ * \mathsf{se}_3 to a vector.
+ *
+ * @param M - the matrix to be converted
+ * @return the VEE vector
+ */
 Eigen::VectorXd LieAlgebra::veelog(Eigen::MatrixXd M) {
     Eigen::Matrix3d R = M.block<3, 3>(0, 0);
     Eigen::Matrix3d eye = Eigen::Matrix3d::Identity();
@@ -104,14 +104,11 @@ Eigen::VectorXd LieAlgebra::veelog(Eigen::MatrixXd M) {
 }
 
 /**
- * @brief This method computes the matrix logarithm of a Lie algebra vector.
-* This method computes the matrix exponential of a Lie algebra vector.
-* The input vector V is a 6x1 vector in \mathbb{R}^6.
-* The output is a 4x4 matrix in \mathsf{SE}_3.
-*
-* @param V - the Lie algebra vector
-* @return the matrix exponential
-*/
+ * @brief This method computes the Composition of the hat map and the matrix exponential.
+ *
+ * @param V - the Lie algebra vector
+ * @return the matrix exponential
+ */ 
 Eigen::Matrix4d LieAlgebra::exphat(Eigen::Matrix<double, 6, 1> V) {
     Eigen::Matrix4d M = Eigen::Matrix4d::Zero();  // Initialize M to zero
     double theta = V.head(3).norm();
@@ -150,8 +147,6 @@ Eigen::Matrix4d LieAlgebra::up_plus(Eigen::Quaterniond q){
 
 /**
  * @brief This method computes the UP_OPLUS operation of a quaternion.
- * The input quaternion q is a unit quaternion.
- * The output is a 4x4 matrix in \mathsf{SE}_3.
  *
  * @param q - a unit quaternion
  * @return the UP_OPLUS matrix
@@ -168,8 +163,6 @@ Eigen::Matrix4d LieAlgebra::up_oplus(Eigen::Quaterniond q){
 
 /**
  * @brief This method computes the UP_STAR operation of a quaternion.
- * The input quaternion q is a unit quaternion.
- * The output is a quaternion in \mathbb{R}^4.
  *
  * @param q - a unit quaternion
  * @return the UP_STAR quaternion
@@ -179,10 +172,7 @@ Eigen::Quaterniond LieAlgebra::up_star(Eigen::Quaterniond q){
 }
 
 /**
- * @brief This method computes the end effector transformation matrix given the link lengths and joint velocities.
- *
- * The input xi is a 6x1 vector representing the joint velocities.
- * The output is a 4x4 matrix representing the end effector transformation.
+ * @brief This method computes the end effector transformation matrix given the link lengths and twist.
  *
  * @param L1 - length of link 1
  * @param L2 - length of link 2
