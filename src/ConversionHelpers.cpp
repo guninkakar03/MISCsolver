@@ -7,7 +7,6 @@
  * converting between arc parameters, Quaternions, and rotation matrices.
  * 
  * @section Credits
- * 
  * This code is based on the research paper "An Efficient Multi-solution Solver for the 
  * Inverse Kinematics of 3-Section Constant-Curvature Robots" 
  * @author Ke Qiu, Jingyu Zhang, Danying Sun, Rong Xiong, Haojian Lu, Yue Wang

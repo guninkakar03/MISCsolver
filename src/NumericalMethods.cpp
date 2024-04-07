@@ -27,10 +27,11 @@
 #include <Eigen/SVD>
 
 /**
- * @brief This method perfroms the Newton-Raphson method
+ * @brief This method perfroms the Newton-Raphson
  * 
- * This method performs the Newton-Raphson method to solve the inverse kinematics
- * of a 3-section constant-curvature robot.
+ * This method performs the Newton-Raphson to solve the inverse kinematics of a 3-section constant-curvature robot.
+ * The initial guess or the input parameter for this function is based out of candidate selection 
+ * makes sure that the solution is found within a few iterations.
  * 
  * @param L1 - the length of the 1st section
  * @param L2 - the length of the 2nd section
