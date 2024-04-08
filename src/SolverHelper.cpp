@@ -18,16 +18,15 @@
 #include "../include/SolverHelper.h"
 #include "../include/LieAlgebra.h"
 
-/*
-* This method computes the linear distance between two ends of a circular arc.
-* Furthermore, this method is Lemma 2  in the paper which represents the
-* Translational constraint.(page 4)
-* 
-* NOTE: This method is equivalent to the MATLAB function MISC.rho(a,L)
-* 
-* @param a - The angle of the circular arc
-* @param L - The length of the circular arc
-*/
+
+/**
+ * @brief Computes the linear distance between two ends of a circular arc.
+ * 
+ * @param a - The cosine of the central angle of the arc.
+ * @param L - the length of the circular arc
+ *
+ * @return the linear distance between the two ends of the arc
+ */
 double SolverHelper::rho(double a, double L) {
     double d;
     if (a == 1) {
@@ -39,27 +38,16 @@ double SolverHelper::rho(double a, double L) {
     
 }
 
-/*
-* SOLN2XI Converts the output of our solver to an exponential coordinate.
-*
-* NOTE: This method is equivalent to the MATLAB function MISC.soln2xi(L1, L2, L3, soln)
-* 
-* @param L1 - The length of the first link
-* @param L2 - The length of the second link
-* @param L3 - The length of the third link
-* @param soln - The solution to the inverse kinematics problem
-*/
+/**
+ * @brief Converts the output of our solver to an exponential coordinate.
+ *
+ * @param L1 - The length of the first link
+ * @param L2 - The length of the second link
+ * @param L3 - The length of the third link
+ *
+ * @param soln - The solution to the inverse kinematics problem
+ */
 Eigen::Matrix<double, 6, 1> SolverHelper::soln2xi (int L1, int L2, int L3, Eigen::Matrix<double, 9, 1> soln) {
-    // double k1 = 2.0 / L1 * acos(soln(2));
-    // double k2 = 2.0 / L2 * acos(soln(5));
-    // double k3 = 2.0 / L3 * acos(soln(8));
-    // double p1 = atan2(soln(1), soln(0));
-    // double p2 = atan2(soln(4), soln(3));
-    // double p3 = atan2(soln(7), soln(6));
-    // Eigen::Matrix<double, 6, 1> xi;
-    // xi << -L1*k1*sin(p1), L1*k1*cos(p1), -L2*k2*sin(p2), L2*k2*cos(p2), -L3*k3*sin(p3), L3*k3*cos(p3);
-    // return xi;
-
     double k1 = 2.0 / L1 * acos(soln(2));  
     double p1 = atan2(soln(1), soln(0));   
     double k2 = 2.0 / L2 * acos(soln(5));  
@@ -74,17 +62,20 @@ Eigen::Matrix<double, 6, 1> SolverHelper::soln2xi (int L1, int L2, int L3, Eigen
           -L3 * k3 * sin(p3),
            L3 * k3 * cos(p3);
     return xi;
-
 }
 
-
-
-/*
-* GET_ERR Computes the error between desired and current end pose.
-*
-* NOTE: This method is equivalent to the MATLAB function MISC.get_err(r1, r2, r3, L1, L2, L3, q, r)
-*
-*/
+/**
+ * @brief Computes the error between the desired and computed end effector positions.
+ * 
+ * @param r1 - The computed position of the first link
+ * @param r2 - The computed position of the second link  
+ * @param r3 - The computed position of the third link
+ * @param L1 - The length of the first link
+ * @param L2 - The length of the second link
+ * @param L3 - The length of the third link
+ * @param q - desired orientation of the end effector
+ * @param r - desired position of the end effector
+ */
 double SolverHelper::get_err(Eigen::Vector3d r1, Eigen::Vector3d r2, Eigen::Vector3d r3, double L1, double L2, double L3, Eigen::Quaterniond q, Eigen::Vector3d r) {
     
     Eigen::Matrix4d Td;
@@ -113,74 +104,17 @@ double SolverHelper::get_err(Eigen::Vector3d r1, Eigen::Vector3d r2, Eigen::Vect
     Eigen::VectorXd V = LieAlgebra::veelog(vec);
     // std::cout << V << std::endl;
     return V.norm();
-
-    // Eigen::Matrix4d Td;
-    // Td << q.toRotationMatrix(), r,
-    //       0, 0, 0, 1;
-
-    // Eigen::Matrix4d T1;
-    // Eigen::Quaterniond q1_temp(0, r1(2), -r1(1), r1(0)); 
-    // T1 << q1_temp.toRotationMatrix(), SolverHelper::rho(r1(2), L1) * r1,
-    //       0, 0, 0, 1;
-
-    // Eigen::Matrix4d T2;
-    // Eigen::Quaterniond q2_temp(0, r2(2), -r2(1), r2(0));
-    // T2 << q2_temp.toRotationMatrix(), SolverHelper::rho(r2(2), L2) * r2,
-    //       0, 0, 0, 1;
-
-    // Eigen::Matrix4d T3;
-    // Eigen::Quaterniond q3_temp(0, r3(2), -r3(1), r3(0)); 
-    // T3 << q3_temp.toRotationMatrix(), SolverHelper::rho(r3(2), L3) * r3,
-    //       0, 0, 0, 1;
-
-    // Eigen::Matrix4d Tt = T1 * T2 * T3;
-    // Eigen::VectorXd V = LieAlgebra::veelog(Tt.inverse() * Td);
-    // return V.norm();
 }
 
-/*
-* SOLVE_R1 Computes the model parameter of the 1st section.
-*
-* NOTE: This method is equivalent to the MATLAB function MISC.solve_r1(L1, L2, L3, q, r, par, noc)
-*
+/**
+* @brief Computes the model parameter of the 1st section.
+* 
+* @param L1 - The length of the first link
+* @param q - The orientation of the end effector
+* @param r - The position of the end effector
+* @param r3 - The position of the third link
+* @param noc - The number of corrections
 */
-// Eigen::VectorXd SolverHelper::solve_r1(double L1, Eigen::Quaterniond q, Eigen::Vector3d r, Eigen::Vector3d r3, double noc) {
-//     double a = q.w();
-//     double b = q.x();
-//     double c = q.y();
-//     double d = q.z();
-
-//     Eigen::Matrix3d B;
-//     B << d, a, b,
-//     -a, d, c,
-//     -b, -c, d;
-
-//     Eigen::Vector3d n0 = B.transpose() * r;
-//     Eigen::Vector3d r0 = (L1 * d) / (n0.norm() * n0.norm()) * n0;
-//     Eigen::Vector3d ne = B * r3;
-
-//     Eigen::Vector3d r1 = SolverHelper::spp(n0, (0.5 + 1/M_PI) * L1 * d, ne, r3);
-
-
-//     if(d != 0){
-//         for(int cor_idx = 1; cor_idx <= noc; cor_idx++){
-//             // Eigen::Matrix<double, 3, 2> r0_ne;
-//             // r0_ne << r0, ne;
-//             // Eigen::MatrixXd A(2, 2);
-//             // A << 0, 0, L1 * d * (1 / acos(r1(2)) - 1 / sqrt(1 - r1(2) * r1(2))),
-//             //     ne.transpose();
-//             // A = (A * r0_ne).inverse();
-//             // Eigen::Vector2d B;
-//             // B << n0.transpose() * r1 - SolverHelper::rho(r1(2), L1) * d,
-//             //     ne.transpose() * r1;
-//             // Eigen::Vector3d tmp = r1 - r0_ne * (A * B);
-//             // r1 = tmp/tmp.norm();
-
-//         }
-//     }
-//     return r1;
-// }
-
 Eigen::VectorXd SolverHelper::solve_r1(double L1, Eigen::Quaterniond q, Eigen::Vector3d r, Eigen::Vector3d r3, double noc) {
     double a = q.w();
     double b = q.x();
@@ -219,7 +153,11 @@ Eigen::VectorXd SolverHelper::solve_r1(double L1, Eigen::Quaterniond q, Eigen::V
 }
 
 
-
+/**
+* @brief Helper function for solving the 1st section.
+*
+* This methos uses LEMMA 1 and 2 to solve the 1st section of the Continuum robot.
+*/
 Eigen::Vector3d SolverHelper::spp(Eigen::Vector3d n1, double d, Eigen::Vector3d n2, Eigen::Vector3d rn){
     double n11 = n1(0);
     double n12 = n1(1);
@@ -262,10 +200,10 @@ Eigen::Vector3d SolverHelper::spp(Eigen::Vector3d n1, double d, Eigen::Vector3d 
     return soln;
 }
 
-/*
-* SOLVE_R2 Computes the model parameter of the 2nd section using rotational and translational constraints.
+/**
+* @brief Computes the model parameter of the 2nd section.
 *
-* NOTE: This method is equivalent to the MATLAB function MISC.solve_r2(L1, L3, q, r, r3, r1)
+* This method uses LEMMA 1 and 2 to solve the 2nd section of the Continuum robot.
 */
 std::array<Eigen::Vector3d, 2> SolverHelper::solve_r2(double L1, double L3, Eigen::Quaterniond q, Eigen::Vector3d r, Eigen::Vector3d r3, Eigen::Vector3d r1) {
     double a = q.w();
