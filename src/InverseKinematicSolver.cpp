@@ -66,9 +66,7 @@ Eigen::MatrixXd InverseKinematicSolver::miscSolver(double L1, double L2, double 
 }
 
 /**
- * @brief This method does the Candidate selection // TODO MORE DETAILS 
- * 
- * // TODO DEATILED DOC
+ * @brief This method does the Candidate selection
  * 
  * @param L1 - the length of the first section
  * @param L2 - the length of the second section
@@ -78,7 +76,7 @@ Eigen::MatrixXd InverseKinematicSolver::miscSolver(double L1, double L2, double 
  * @param par - Partition size
  * @param noc - correction array
  * 
- * @return // todo
+ * @return a 6 x n matrix containing n possible solutions to the inverse kinematics problem
  */
 Eigen::MatrixXd InverseKinematicSolver::miscSolver__(double L1, double L2, double L3, Eigen::Quaterniond q, Eigen::Vector3d r, double par, Eigen::Vector2d noc){
 
