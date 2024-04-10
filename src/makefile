@@ -15,4 +15,3 @@ clean:
 	rm -f $(EXEC) $(OBJECTS)
 
 .PHONY: clean
-

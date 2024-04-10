@@ -132,6 +132,8 @@ Eigen::Matrix4d LieAlgebra::exphat(Eigen::Matrix<double, 6, 1> V) {
 /**
  * @brief This method computes the UP_PLUS operation of a quaternion.
  * 
+ * Computes the matrix for left multiplications of quaternions.
+ *
  * @param q - a unit quaternion
  * @return a 4x4 matrix representing the UP_PLUS operation
  */
@@ -147,7 +149,9 @@ Eigen::Matrix4d LieAlgebra::up_plus(Eigen::Quaterniond q){
 
 /**
  * @brief This method computes the UP_OPLUS operation of a quaternion.
- *
+ * 
+ * Computes the matrix for right multiplications of quaternions.
+ * 
  * @param q - a unit quaternion
  * @return the UP_OPLUS matrix
  */
