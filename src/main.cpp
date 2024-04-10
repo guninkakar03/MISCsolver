@@ -39,9 +39,10 @@ void main_demo(){
     double L1 = 1;
     double L2 =  1;
     double L3 = 1;
-    double alpha = 15 * M_PI / 16;
+    double alpha = 16 * M_PI / 16;
     Eigen::Vector3d omega;
-    omega << 0.011481, -0.939049,-1.738908;
+    // omega << 0.011481, -0.939049,-1.738908;
+    omega  << 0.48, sqrt(3)/10, -0.86;
 
 
     Eigen::Quaterniond q(cos(alpha / 2), sin(alpha / 2) * omega(0), sin(alpha / 2) * omega(1), sin(alpha / 2) * omega(2));
@@ -53,9 +54,10 @@ void main_demo(){
     Eigen::Vector3d r;
     r << -0.4, 1.1, 0.8;
 
-    Eigen::MatrixXd sol = InverseKinematicSolver::miscSolver(L1, L2, L3,  q, r,  0.01,  0.1,  4, noc);
+    Eigen::MatrixXd sol = InverseKinematicSolver::miscSolver(L1, L2, L3,  q, r,  0.01,  0.01,  4, noc);
     std::cout << "sol: " << sol << std::endl;
 }
+
 
 
 int main() {

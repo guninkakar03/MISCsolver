@@ -225,25 +225,6 @@ Eigen::MatrixXd InverseKinematicSolver::miscSolver__(double L1, double L2, doubl
     std::cout <<"is_fina: " << is_final << std::endl;
     std::cout << "sols_f"<<solns_final << std::endl;
 
-    Eigen::VectorXd ts = is_final.unaryExpr([&](int idx) { return zeta(idx); });
-
-// // **************************************
-//     Eigen::VectorXd abs_diff = (ts.array() - 0.5).abs();
-//     std::vector<int> indices(ts.size());
-//     for (int i = 0; i < ts.size(); ++i) {
-//         indices[i] = i;
-//     }
-//     std::sort(indices.begin(), indices.end(), [&](int i, int j) {
-//         return abs_diff(i) < abs_diff(j);
-//     });
-
-//     std::cout << "Sorted indices: ";
-//     for (int idx : indices) {
-//         std::cout << idx << " ";
-//     }
-// // **************************************
-
-
     return solns_final;
 
 }
