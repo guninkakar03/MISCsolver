@@ -1,6 +1,6 @@
 CXX = g++
 CXXFLAGS = -g -std=c++11 -Wall -I/opt/homebrew/Cellar/eigen/3.4.0_1/include/eigen3 -MMD -MP
-# CXXFLAGS += -O3 -flto
+CXXFLAGS += -O3 -flto
 LDFLAGS = -flto
 EXEC = main
 SRCDIR = src

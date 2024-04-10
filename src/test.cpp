@@ -166,7 +166,14 @@ void test_avg_runtime(){
 
     int n = 10000;
     for (int i = 0; i < n; ++i) {
-        Eigen::VectorXd angles = M_PI * Eigen::VectorXd::Random(6).cwiseAbs();
+        Eigen::VectorXd angles(6);
+         angles << M_PI * Eigen::VectorXd::Random(1).cwiseAbs(),
+            2 * M_PI * Eigen::VectorXd::Random(1).cwiseAbs(),
+            M_PI * Eigen::VectorXd::Random(1).cwiseAbs(),
+            2 * M_PI * Eigen::VectorXd::Random(1).cwiseAbs(),
+            M_PI * Eigen::VectorXd::Random(1).cwiseAbs(),
+            2 * M_PI * Eigen::VectorXd::Random(1).cwiseAbs();
+
         Eigen::VectorXd xi = ConversionHelper::arc2xi(L1, L2, L3, angles);
         Eigen::Matrix4d T = LieAlgebra::get_end(L1, L2, L3, xi);
         Eigen::Quaterniond q = ConversionHelper::rot2q(T.block<3,3>(0,0));
