@@ -1,8 +1,5 @@
-# An Actuator Space Optimal Path Tracking Framework for Continuum Robots: Theory, Algorithm and Validation
-
-This repository implements the algorithms presented in our article.
-
-Our previous work (titled: An Efficient Multi-solution Solver for the Inverse Kinematics of 3-Section Constant-Curvature Robots) appeared in proceedings of Robotics: Science and Systems 2023. If you enjoy this repository and use it, please cite our paper
+# An Efficient Multi-solution Solver for the Inverse Kinematics of 3-Section Constant-Curvature Robots
+This repository implements the algorithms presented in the paper "An Efficient Multi-solution Solver for the Inverse Kinematics of 3-Section Constant-Curvature Robots" by State Key Laboratory of Industrial Control and Technology at Zhejiang University, China.
 
 ```
 @INPROCEEDINGS{Qiu-RSS-23, 
@@ -15,20 +12,6 @@ Our previous work (titled: An Efficient Multi-solution Solver for the Inverse Ki
     DOI       = {10.15607/RSS.2023.XIX.091} 
 } 
 ```
-
-### Demo
-
-**(main_demo.m)** Results of multiple solutions obtained by our algorithm.
-
-<img src="./fig/eg30105.svg" width="30%"><img src="./fig/eg30266.svg" width="30%">
-
-<img src="./fig/eg30683.svg" width="30%"><img src="./fig/eg30850.svg" width="30%">
-
-**(main_demo2.m)** Results of tracking a straight line path in two different configurations obtained by our algorithm.
-
-<img src="./fig/fig1.png" width="66%">
-
-<img src="./fig/fig2.png" width="66%">
 
 ### Package Overview
 
@@ -49,15 +32,6 @@ private:
 - get_err.m  
 - solve_r1.m  
 - solve_r2.m  
-<br/>
-
-**Planner (3 files)**  
-public:  
-- dp.m  
-- allocate_time.m
-
-private:  
-- PUTC.mat  
 <br/>
 
 **Numerical Methods (5 files)**  
@@ -94,14 +68,6 @@ private:
 - rot2q.m  
 <br/>
 
-**Other Tools (6 files)**  
-- circles3.m  
-- circles3c.m  
-- frame.m  
-- get_end.m  
-- collision_indicator.m  
-- collision_marker.m  
-<br/>
 
 ### Functions
 
@@ -227,29 +193,6 @@ This is a private function of our solver.
 
 <br/>
 
-#### Planner
-
-**dp.m**
-
-`DP` Finds the shortest path in a graph.
-
-`[PATH, COST] = DP(XISC, LOSSFUN)` returns the paths and corresponding costs using the Dijkstra’s algorithm. The cell array `XISC` defines the vertices. The function handle `LOSSFUN` defines the weight of two adjacent edges. The output `PATH` and `COST` are cell arrays.
-
-<br/>
-
-**allocate_time.m**
-
-`ALLOCATE_TIME` allocates optimal time to a given sequence of concatenated parameters, considering the actuator velocity constraints.
-
-`TS = ALLOCATE_TIME(XIS)` returns the time array `TS`.
-
-<br/>
-
-**PUTC.mat**
-
-This file stores the mechanism constants of our continuum robot prototype, like the radius of pullies, positions of channels. These data would be used when allocating time in the actuator space.
-
-<br/>
 
 #### Numerical Methods
 
@@ -458,57 +401,6 @@ len = xi2len(xi);
 
 <br/>
 
-#### Other Tools
-
-**circles3.m**
-
-`CIRCLES3` Visualises the 3-section constant-curvature robot with given model parameters.
-
-`CIRCLES3(FH, L1, L2, L3, XI, TYPE)` displays the plot in target figure `FH`. The robot is described by the section lengths `L1, L2, L3` and the overall exponential coordinate `XI`. Line colours and styles are specified in the character string `TYPE`.
-
-*Example*
-```matlab
-L1 = 1; L2 = 1; L3 = 1;
-xi_1 = [-1.60; 0.08; 1.20; -0.20; 0.60; 0.20];
-circles3(1, L1, L2, L3, xi_1, 'k--');
-xi_2 = [-0.39; 0.48; -1.13; 0.47; 1.79; -0.17];
-circles3(1, L1, L2, L3, xi_2, 'k-');
-view(75, 9);
-```
-
-<br/>
-
-**circles3c.m**
-
-`CIRCLES3` Visualises the 3-section constant-curvature robot with given model parameters and a specified colour.
-
-`CIRCLES3C(FH, L1, L2, L3, XI, TYPE, COLOUR)` displays the plot in target figure `FH`. The robot is described by the section lengths `L1, L2, L3` and the overall exponential coordinate `XI`. Line styles are specified in the character string `TYPE`, line colours are specified in the triple `COLOUR`.
-
-*Example*
-```matlab
-L1 = 1; L2 = 1; L3 = 1;
-xi_1 = [-1.60; 0.08; 1.20; -0.20; 0.60; 0.20];
-circles3c(1, L1, L2, L3, xi_1, '--', [0.1, 0.1, 0.1]);
-xi_2 = [-0.39; 0.48; -1.13; 0.47; 1.79; -0.17];
-circles3c(1, L1, L2, L3, xi_2, '-', [0.2, 0.2, 0.2]);
-view(75, 9);
-```
-
-<br/>
-
-**frame.m**
-
-`FRAME` draws a coordinate frame with specified position (and orientation) and transparency.
-
-`FRAME(FH, A, ALPHA)` displays the plot in target figure `FH`. The position (and orientation) is specified by `A` and the transparency is specified by `ALPHA`.
-
-*Example*
-```matlab
-frame(1, [eye(3), zeros(3, 1); 0, 0, 0, 1], 0.3);
-```
-
-<br/>
-
 **get_end.m**
 
 `GET_END` Computes the end pose of a 3-section constant-curvature robot.
@@ -520,42 +412,4 @@ frame(1, [eye(3), zeros(3, 1); 0, 0, 0, 1], 0.3);
 xi = [-1.6; 0.8; 1.2; -0.2; 0.6; 0.2];
 T = get_end(1, 1, 1, xi);
 ```
-
 <br/>
-
-**collision_indicator.m**
-
-`COLLISION_INDICATOR` Computes the minimal distance between the sample points and the spherical obstacles.
-
-`COLLIDE = COLLISION_INDICATOR(L1, L2, L3, XI, RO, ROR, SMP)` returns the minimal distance `COLLIDE`. If `COLLIDE > 0`, then no collision occurs. If `COLLIDE < 0`, then the robot collides with obstacles. The robot is described by the section lengths `L1, L2, L3` and the overall exponential coordinate `XI`. The obstacles are spheres centring at `RO` with radius `ROR`. The sample points are distributed uniformly along the robot curve with the number `SMP`.
-
-*Example*
-```matlab
-L1 = 1; L2 = 1; L3 = 1;
-xi = [-1.6; 0.8; 1.2; -0.2; 0.6; 0.2];
-ro = [0.8; 0.7; 0.6];
-ror = 0.4;
-collide = collision_indicator(L1, L2, L3, xi, ro, ror, 10);
-```
-
-<br/>
-
-**collision_marker.m**
-
-`COLLISION_MARKER` Visualises the collision part in yellow.
-
-`COLLISION_MARKER(L1, L2, L3, XI, RO, ROR)` draws the part of the robot that is collided with obstacles. The robot is described by the section lengths `L1, L2, L3` and the overall exponential coordinate `XI`. The obstacles are spheres centring at `RO` with radius `ROR`.
-
-*Example*
-```matlab
-L1 = 1; L2 = 1; L3 = 1;
-xi = [-1.6; 0.8; 1.2; -0.2; 0.6; 0.2];
-ro = [0.8; 0.7; 0.6];
-ror = 0.4;
-circles3(1, L1, L2, L3, xi, 'k-');
-collision_marker(L1, L2, L3, xi, ro, ror);
-view(75, 9);
-```
-
-<br/>
-
