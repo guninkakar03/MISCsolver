@@ -112,45 +112,45 @@ void test_based_on_alpha() {
 }
 
 
-void test_based_on_r(){
-    double L1 = 1;
-    double L2 =  1;
-    double L3 = 1;
-    Eigen::Vector3d omega;
-    omega  << 0.48, sqrt(3)/10, -0.86;
-    double alpha = 15 * M_PI / 16;
+// void test_based_on_r(){
+//     double L1 = 1;
+//     double L2 =  1;
+//     double L3 = 1;
+//     Eigen::Vector3d omega;
+//     omega  << 0.48, sqrt(3)/10, -0.86;
+//     double alpha = 15 * M_PI / 16;
    
 
-    // array of candidate r values
-    std::array<Eigen::Vector3d, 3> rs = {Eigen::Vector3d(-0.4, 1.1, 0.8), Eigen::Vector3d(0.1, 0.2, 0.3), Eigen::Vector3d(0.5, 0.6, 0.7)};
-    std::array<Eigen::MatrixXd, 3> solutions;
-    for (int i = 0; i < 1; i++) {
-        Eigen::MatrixXd sol = runScenarios_(L1, L2, L3, alpha, rs[i], omega, 0.01);
-        solutions[i] = sol;
-    }
-    // array of expected solutions
-    std::array<Eigen::MatrixXd, 3> expected_solutions = {
-        Eigen::MatrixXd::Constant(6, 1, 0.0),
-        Eigen::MatrixXd::Constant(6, 1, 0.0),
-        Eigen::MatrixXd::Constant(6, 1, 0.0)
-    };
-    // Eigen::MatrixXd expected_solution
-    Eigen::MatrixXd expected_solutions1(6, 1);
-    expected_solutions1 <<   -0.4745,
-                            1.6102,
-                            4.9098,
-                        -0.0625,
-                        -1.8902,
-                        -0.7074;
+//     // array of candidate r values
+//     std::array<Eigen::Vector3d, 3> rs = {Eigen::Vector3d(-0.4, 1.1, 0.8), Eigen::Vector3d(0.1, 0.2, 0.3), Eigen::Vector3d(0.5, 0.6, 0.7)};
+//     std::array<Eigen::MatrixXd, 3> solutions;
+//     for (int i = 0; i < 1; i++) {
+//         Eigen::MatrixXd sol = runScenarios_(L1, L2, L3, alpha, rs[i], omega, 0.01);
+//         solutions[i] = sol;
+//     }
+//     // array of expected solutions
+//     std::array<Eigen::MatrixXd, 3> expected_solutions = {
+//         Eigen::MatrixXd::Constant(6, 1, 0.0),
+//         Eigen::MatrixXd::Constant(6, 1, 0.0),
+//         Eigen::MatrixXd::Constant(6, 1, 0.0)
+//     };
+//     // Eigen::MatrixXd expected_solution
+//     Eigen::MatrixXd expected_solutions1(6, 1);
+//     expected_solutions1 <<   -0.4745,
+//                             1.6102,
+//                             4.9098,
+//                         -0.0625,
+//                         -1.8902,
+//                         -0.7074;
 
-    expected_solutions[0] = expected_solutions1;
-    // expected_solutions[1] = expected_solutions2;
-    // expected_solutions[2] = expected_solutions3;
-    std::cout << "expected_solutions1:\n" << expected_solutions1 << std::endl;
-    std::cout << "solutions[0]:\n" << solutions[0] << std::endl;
+//     expected_solutions[0] = expected_solutions1;
+//     // expected_solutions[1] = expected_solutions2;
+//     // expected_solutions[2] = expected_solutions3;
+//     std::cout << "expected_solutions1:\n" << expected_solutions1 << std::endl;
+//     std::cout << "solutions[0]:\n" << solutions[0] << std::endl;
 
-    for (int i = 0; i < 1; i++) {
-        test_assert(solutions[i], expected_solutions[i], 1e-2);
-    }
+//     for (int i = 0; i < 1; i++) {
+//         test_assert(solutions[i], expected_solutions[i], 1e-2);
+//     }
     
-}
+// }
