@@ -15,7 +15,6 @@
  */
 
 
-
 #include <iostream>
 #include "../include/LieAlgebra.h"
 #include "../include/ConversionHelpers.h"
@@ -26,6 +25,7 @@
 #include <array>
 #include <unsupported/Eigen/MatrixFunctions>
 #include "../include/test.h"
+#include "../include/generateXML.h"
 
 /**
 * @brief This function runs the scenarios.
@@ -87,10 +87,38 @@ void test_code(){
     test_based_on_r();
 }
 
+void generate_visulaization(){
+    double L1 = 1.;
+    double L2 =  1.;
+    double L3 = 1.;
+    // double alpha = 6 * M_PI / 21;
+    // double alpha = 5. * M_PI / 15.;
+    double alpha = 15. * M_PI / 16.;
+    Eigen::Vector3d omega;
+    // omega << 0.011481, -0.939049,-1.738908;
+    omega  << 0.48, sqrt(3.)/10., -0.86;
+
+
+    Eigen::Quaterniond q(cos(alpha / 2.), sin(alpha / 2.) * omega(0), sin(alpha / 2.) * omega(1), sin(alpha / 2.) * omega(2));
+    // std::cout << q.toRotationMatrix() << std::endl;
+   
+    Eigen::Vector2d noc;
+    noc << 5., 5.;
+
+    Eigen::Vector3d r;
+    // r << 0.21, 0.42, 0.8;
+    r << -0.4, 1.1, 0.8;
+    
+    Eigen::MatrixXd sol = runScenarios(L1, L2, L3, alpha, r, omega, 0.01);
+    generate(1, 1, 1, sol);
+}
+
 int main() {
-    //main_demo();
+    // main_demo();
     //test_code();
-    test_avg_runtime();
+    // test_avg_runtime();
+    
+    generate_visulaization();
     return 0;
 
 }
