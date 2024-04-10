@@ -11,5 +11,6 @@ Eigen::MatrixXd runScenarios_(double L1, double L2, double L3, double alpha, Eig
 void test_assert(Eigen::MatrixXd actual, Eigen::MatrixXd expected);
 void test_based_on_alpha();
 void test_based_on_r();
+void test_avg_runtime();
 
 #endif // TEST_H

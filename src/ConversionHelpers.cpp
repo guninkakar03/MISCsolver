@@ -70,7 +70,7 @@ Eigen::Quaterniond ConversionHelper::arc2q(double kappa, double phi, double L) {
     double w = cos(kappa * (L / 2.0));
     double x = -sin(kappa * (L / 2.0)) * sin(phi);
     double y = sin(kappa * (L / 2.0)) * cos(phi);
-    double z = 0;
+    double z = 0.0;
     return Eigen::Quaterniond(w, x, y, z);
 }
 
@@ -108,9 +108,9 @@ Eigen::Matrix<double, 6, 1> ConversionHelper::arc2xi(int L1, int L2, int L3, Eig
  * @return the arc parameters
  */
 Eigen::Matrix<double, 6, 1> ConversionHelper::xi2arc(int L1, int L2, int L3, Eigen::Matrix<double, 6, 1> xi) {
-    double k1 = fmod(sqrt(pow(xi(0), 2) + pow(xi(1), 2)), 2 * M_PI) / L1;
-    double k2 = fmod(sqrt(pow(xi(2), 2) + pow(xi(3), 2)), 2 * M_PI) / L2;
-    double k3 = fmod(sqrt(pow(xi(4), 2) + pow(xi(5), 2)), 2 * M_PI) / L3;
+    double k1 = fmod(sqrt(pow(xi(0), 2.0) + pow(xi(1), 2.)), 2. * M_PI) / L1;
+    double k2 = fmod(sqrt(pow(xi(2), 2.0) + pow(xi(3), 2.)), 2. * M_PI) / L2;
+    double k3 = fmod(sqrt(pow(xi(4), 2.0) + pow(xi(5), 2.)), 2. * M_PI) / L3;
 
     double phi1 = atan2(-xi(0), xi(1));
     double phi2 = atan2(-xi(2), xi(3));

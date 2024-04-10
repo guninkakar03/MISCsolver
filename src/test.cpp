@@ -2,7 +2,9 @@
 #include <Eigen/Dense>
 #include <array>
 #include "../include/InverseKinematicSolver.h"
-
+#include "../include/ConversionHelpers.h"
+#include "../include/LieAlgebra.h"
+#include <chrono>
 
 /**
 * @brief This function runs the scenarios.
@@ -59,13 +61,13 @@ void test_based_on_alpha() {
     double L2 =  1;
     double L3 = 1;
     Eigen::Vector3d omega;
-    omega  << 0.48, sqrt(3)/10, -0.86;
+    omega  << 0.48, sqrt(3)/10., -0.86;
    
     Eigen::Vector3d r;
     r << -0.4, 1.1, 0.8;
 
     // array of candidate alpha values
-    std::array<double, 3> alphas = {6 * M_PI / 21, 17 * M_PI / 21, 5 * M_PI / 15};
+    std::array<double, 3> alphas = {6. * M_PI / 21., 17. * M_PI / 21., 5. * M_PI / 15.};
     std::array<Eigen::MatrixXd, 3> solutions;
     for (int i = 0; i < 3; i++) {
         Eigen::MatrixXd sol = runScenarios_(L1, L2, L3, alphas[i], r, omega, 0.01);
@@ -112,7 +114,7 @@ void test_based_on_alpha() {
 }
 
 
-// void test_based_on_r(){
+void test_based_on_r(){
 //     double L1 = 1;
 //     double L2 =  1;
 //     double L3 = 1;
@@ -153,4 +155,31 @@ void test_based_on_alpha() {
 //         test_assert(solutions[i], expected_solutions[i], 1e-2);
 //     }
     
-// }
+}
+
+void test_avg_runtime(){
+    double L1 = 1.0, L2 = 1.0, L3 = 1.0;
+    double avgtime = 0.0;
+
+    Eigen::Vector2d noc;
+    noc << 5, 5;
+
+    int n = 10000;
+    for (int i = 0; i < n; ++i) {
+        Eigen::VectorXd angles = M_PI * Eigen::VectorXd::Random(6).cwiseAbs();
+        Eigen::VectorXd xi = ConversionHelper::arc2xi(L1, L2, L3, angles);
+        Eigen::Matrix4d T = LieAlgebra::get_end(L1, L2, L3, xi);
+        Eigen::Quaterniond q = ConversionHelper::rot2q(T.block<3,3>(0,0));
+        Eigen::Vector3d r = T.block<3,1>(0,3);
+        
+        auto start = std::chrono::high_resolution_clock::now();
+        Eigen::MatrixXd sol  = InverseKinematicSolver::miscSolver(L1, L2, L3, q, r, 1e-2, 1e-2, 4, noc);
+        auto end = std::chrono::high_resolution_clock::now();
+        double rt = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        avgtime += rt;
+
+        // std::cout << "A solution is found in " << rt << " ms." << std::endl;
+    }
+
+    std::cout << "Average runtime was " << avgtime / static_cast<double>(n) << " ms." << std::endl;
+}

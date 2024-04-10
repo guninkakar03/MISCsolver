@@ -59,9 +59,9 @@ Eigen::MatrixXd InverseKinematicSolver::miscSolver(double L1, double L2, double 
             nos = nos + 1;
         }
     }
-    std::cout << "Finally ***** assignment, sol:\n" << nos << std::endl;
+    //std::cout << "Finally ***** assignment, sol:\n" << nos << std::endl;
     Eigen::MatrixXd sol_trimmed = sol.block(0, 0, sol.rows(), nos);
-    std::cout << "noi: " << noi << std::endl;
+    //std::cout << "noi: " << noi << std::endl;
     return sol_trimmed;
 }
 
@@ -192,9 +192,9 @@ Eigen::MatrixXd InverseKinematicSolver::miscSolver__(double L1, double L2, doubl
     }
 
     i = npar - 1;
-    std::cout << err(i) <<std::endl;
-    std::cout << err_r(i) <<std::endl;
-    std::cout << err_t(i) <<std::endl;
+    // std::cout << err(i) <<std::endl;
+    // std::cout << err_r(i) <<std::endl;
+    // std::cout << err_t(i) <<std::endl;
   
     Eigen::MatrixXd solns_final;
     Eigen::VectorXd is_final;
@@ -222,8 +222,8 @@ Eigen::MatrixXd InverseKinematicSolver::miscSolver__(double L1, double L2, doubl
         }
     }
 
-    std::cout <<"is_fina: " << is_final << std::endl;
-    std::cout << "sols_f"<<solns_final << std::endl;
+    //std::cout <<"is_fina: " << is_final << std::endl;
+    //std::cout << "sols_f"<<solns_final << std::endl;
 
     return solns_final;
 
